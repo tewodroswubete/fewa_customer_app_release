@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fewa Customer App - Download</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', Roboto, -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%);
+      color: #e2e8f0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    .header {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 40px 36px 36px;
+      text-align: center;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
+      margin-bottom: 24px;
+    }
+
+    .app-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #3b82f6, #06b6d4);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      box-shadow: 0 8px 24px rgba(59, 130, 246, 0.35);
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #f8fafc;
+      margin-bottom: 4px;
+    }
+
+    .subtitle {
+      color: #94a3b8;
+      font-size: 0.9rem;
+      margin-bottom: 20px;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #60a5fa;
+    }
+
+    .stat-label {
+      font-size: 0.72rem;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 2px;
+    }
+
+    /* Search & Filter Bar */
+    .toolbar {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    }
+
+    .search-box {
+      position: relative;
+      margin-bottom: 12px;
+    }
+
+    .search-box svg {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 18px;
+      height: 18px;
+      color: #64748b;
+      pointer-events: none;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 12px 14px 12px 44px;
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      color: #e2e8f0;
+      font-size: 0.92rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .search-box input::placeholder { color: #475569; }
+    .search-box input:focus { border-color: rgba(59, 130, 246, 0.5); }
+
+    .filter-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 7px 16px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.04);
+      color: #94a3b8;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-btn:hover { background: rgba(255, 255, 255, 0.08); color: #e2e8f0; }
+    .filter-btn.active {
+      background: rgba(59, 130, 246, 0.2);
+      border-color: rgba(59, 130, 246, 0.4);
+      color: #60a5fa;
+    }
+
+    /* Results count */
+    .results-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 4px;
+      margin-bottom: 12px;
+      font-size: 0.82rem;
+      color: #64748b;
+    }
+
+    /* Version Cards */
+    .version-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .version-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 18px;
+      padding: 22px 22px 18px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+      transition: all 0.25s ease;
+    }
+
+    .version-card:hover {
+      background: rgba(255, 255, 255, 0.08);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.25);
+    }
+
+    .version-card.latest {
+      border-color: rgba(59, 130, 246, 0.25);
+      background: rgba(59, 130, 246, 0.06);
+    }
+
+    .version-card.latest:hover {
+      background: rgba(59, 130, 246, 0.1);
+    }
+
+    .version-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .version-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .version-number {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #f1f5f9;
+    }
+
+    .badge {
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .badge-latest {
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      color: #fff;
+    }
+
+    .badge-stable {
+      background: rgba(34, 197, 94, 0.15);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      color: #4ade80;
+    }
+
+    .badge-beta {
+      background: rgba(251, 191, 36, 0.15);
+      border: 1px solid rgba(251, 191, 36, 0.3);
+      color: #fbbf24;
+    }
+
+    .version-date {
+      font-size: 0.8rem;
+      color: #64748b;
+      white-space: nowrap;
+      margin-top: 4px;
+    }
+
+    .version-changes {
+      margin-bottom: 16px;
+    }
+
+    .version-changes ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .version-changes ul li {
+      position: relative;
+      padding-left: 20px;
+      font-size: 0.85rem;
+      color: #94a3b8;
+      line-height: 1.7;
+    }
+
+    .version-changes ul li::before {
+      content: "";
+      position: absolute;
+      left: 4px;
+      top: 10px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #3b82f6;
+    }
+
+    .change-tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 1px 7px;
+      border-radius: 4px;
+      margin-right: 6px;
+      text-transform: uppercase;
+    }
+
+    .tag-new { background: rgba(34, 197, 94, 0.15); color: #4ade80; }
+    .tag-fix { background: rgba(251, 146, 60, 0.15); color: #fb923c; }
+    .tag-improve { background: rgba(96, 165, 250, 0.15); color: #60a5fa; }
+
+    .version-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .file-size {
+      font-size: 0.78rem;
+      color: #64748b;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .file-size svg { width: 14px; height: 14px; }
+
+    .download-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    }
+
+    .download-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45);
+      background: linear-gradient(135deg, #60a5fa, #3b82f6);
+    }
+
+    .download-btn.secondary {
+      background: rgba(255, 255, 255, 0.06);
+      box-shadow: none;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .download-btn.secondary:hover {
+      background: rgba(255, 255, 255, 0.12);
+      box-shadow: none;
+    }
+
+    .download-btn svg { width: 15px; height: 15px; flex-shrink: 0; }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 48px 20px;
+      color: #475569;
+      display: none;
+    }
+
+    .empty-state svg { width: 48px; height: 48px; margin-bottom: 16px; opacity: 0.4; }
+    .empty-state p { font-size: 0.92rem; }
+    .empty-state .hint { font-size: 0.8rem; margin-top: 6px; }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      margin-top: 28px;
+      padding: 16px;
+      font-size: 0.78rem;
+      color: #475569;
+    }
+
+    .note {
+      background: rgba(251, 191, 36, 0.08);
+      border: 1px solid rgba(251, 191, 36, 0.15);
+      border-radius: 10px;
+      padding: 10px 16px;
+      font-size: 0.78rem;
+      color: #fbbf24;
+      text-align: center;
+      margin-top: 16px;
+    }
+
+    @media (max-width: 480px) {
+      .header { padding: 28px 20px 24px; }
+      h1 { font-size: 1.35rem; }
+      .version-card { padding: 16px; }
+      .version-top { flex-direction: column; gap: 4px; }
+      .version-bottom { flex-direction: column; gap: 12px; align-items: flex-start; }
+      .stats { gap: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="app-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="38" height="38">
+        <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+        <line x1="12" y1="18" x2="12.01" y2="18"/>
+      </svg>
+    </div>
+    <h1>Fewa Customer App</h1>
+    <p class="subtitle">Official customer application for Android</p>
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-value" id="totalReleases">10</div>
+        <div class="stat-label">Releases</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value" id="latestVersion">v1.9.0</div>
+        <div class="stat-label">Latest</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">Android</div>
+        <div class="stat-label">Platform</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search & Filter -->
+  <div class="toolbar">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input type="text" id="searchInput" placeholder="Search by version, date, or changelog...">
+    </div>
+    <div class="filter-row">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="stable">Stable</button>
+      <button class="filter-btn" data-filter="beta">Beta</button>
+    </div>
+  </div>
+
+  <!-- Results info -->
+  <div class="results-info">
+    <span id="resultCount">Showing 1 release</span>
+    <span id="clearSearch" style="display:none;cursor:pointer;color:#60a5fa;">Clear search</span>
+  </div>
+
+  <!-- Version List -->
+  <div class="version-list" id="versionList">
+
+    <!--
+      ============================================================
+      HOW TO ADD A NEW VERSION:
+      ============================================================
+      1. Add your APK file to the repo (e.g. fewalunch-v1.1.0.apk)
+      2. Copy a version-card block below
+      3. Paste it at the TOP of this list (above the previous latest)
+      4. Update: version number, date, changelog, APK filename, file size
+      5. Add data-version, data-type, data-date attributes
+      6. Set class="version-card latest" on the new one
+      7. Remove "latest" class from the old one
+      8. Change old download button to class="download-btn secondary"
+      9. Remove the badge-latest span from the old one
+      10. Update #totalReleases count and #latestVersion in the header
+      11. Commit and push!
+
+      Attributes explained:
+        data-version  = version string for search (e.g. "v1.1.0")
+        data-type     = "stable" or "beta" for filtering
+        data-date     = date string for search (e.g. "Apr 28, 2026")
+    -->
+
+    <!-- v1.9.0 - LATEST -->
+    <div class="version-card latest" data-version="v1.9.0" data-type="stable" data-date="Sep 6, 2026">
+      <div class="version-top">
+        <div class="version-info">
+          <span class="version-number">v1.9.0</span>
+          <span class="badge badge-latest">Latest</span>
+          <span class="badge badge-stable">Stable</span>
+        </div>
+        <span class="version-date">Sep 6, 2026</span>
+      </div>
+      <div class="version-changes">
+        <ul>
+          <li><span class="change-tag tag-new">New</span>App lock — ask PIN every time the app is reopened</li>
+          <li><span class="change-tag tag-new">New</span>Firebase push notifications with reliable device token registration</li>
+          <li><span class="change-tag tag-improve">Improve</span>Closed button on home now opens the pre-order page</li>
+          <li><span class="change-tag tag-improve">Improve</span>Language options limited to English and Amharic</li>
+          <li><span class="change-tag tag-fix">Fix</span>Relogin flow, close-order routing, and Telegram OTP only for linked accounts</li>
+          <li><span class="change-tag tag-fix">Fix</span>Order history cache clears correctly after cancelling an order</li>
+        </ul>
+      </div>
+      <div class="version-bottom">
+        <span class="file-size">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
+            <polyline points="13 2 13 9 20 9"/>
+          </svg>
+          59 MB
+        </span>
+        <a class="download-btn" href="fewa_customer_v1.9.0.apk">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Download
+        </a>
+      </div>
+    </div>
+
+    <!-- v1.8.0 -->
+    <div class="version-card" data-version="v1.8.0" data-type="stable" data-date="Aug 23, 2026">
+      <div class="version-top">
+        <div class="version-info">
+          <span class="version-number">v1.8.0</span>
+          <span class="badge badge-stable">Stable</span>
+        </div>
+        <span class="version-date">Aug 23, 2026</span>
+      </div>
+      <div class="version-changes">
+        <ul>
+          <li><span class="change-tag tag-new">New</span>Telegram login: OTP delivered via Telegram bot when phone is linked to a Telegram account</li>
+          <li><span class="change-tag tag-new">New</span>OTP auto-fill from clipboard — paste code with one tap</li>
+          <li><span class="change-tag tag-fix">Fix</span>Remaining meal count now updates immediately after placing or cancelling a pre-order</li>
+          <li><span class="change-tag tag-improve">Improve</span>All API data is now real-time — cache is invalidated on every order, plan, and payment change</li>
+        </ul>
+      </div>
+      <div class="version-bottom">
+        <span class="file-size">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
+            <polyline points="13 2 13 9 20 9"/>
+          </svg>
+          58 MB
+        </span>
+        <a class="download-btn secondary" href="fewa_customer_v1.8.0.apk">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Download
+        </a>
+      </div>
+    </div>
+
+    <!-- v1.7.0 -->
+    <div class="version-card" data-version="v1.7.0" data-type="stable" data-date="Jul 21, 2026">
+      <div class="version-top">
+        <div class="version-info">
+          <span class="version-number">v1.7.0</span>
+          <span class="badge badge-stable">Stable</span>
+        </div>
+        <span class="version-date">Jul 21, 2026</span>
+      </div>
+      <div class="version-changes">
+        <ul>
+          <li><span class="change-tag tag-improve">Improve</span>PIN login screen fully responsive across all phone sizes (small, foldable, standard, large)</li>
+          <li><span class="change-tag tag-improve">Improve</span>Adaptive numpad: button sizes, spacing, and aspect ratio scale with screen dimensions</li>
+          <li><span class="change-tag tag-improve">Improve</span>PIN input dots, avatar, fonts, and spacing adapt proportionally to any screen</li>
+        </ul>
+      </div>
+      <div class="version-bottom">
+        <span class="file-size">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
+            <polyline points="13 2 13 9 20 9"/>
+          </svg>
+          54 MB
+        </span>
+        <a class="download-btn secondary" href="fewa_customer_v1.7.0.apk">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Download
+        </a>
+      </div>
+    </div>
+
+    <!-- v1.6.0 -->
+    <div class="version-card" data-version="v1.6.0" data-type="stable" data-date="Jul 14, 2026">
+      <div class="version-top">
+        <div class="version-info">
+          <span class="version-number">v1.6.0</span>
+          <span class="badge badge-stable">Stable</span>
+        </div>
+        <span class="version-date">Jul 14, 2026</span>
+      </div>
+      <div class="version-changes">
+        <ul>
+          <li><span class="change-tag tag-new">New</span>Payment screen supports both automatic (Telebirr-verified) and manual receipt submission</li>
+          <li><span class="change-tag tag-new">New</span>Plan history shows a Paid badge per plan with formatted activation/expiration dates</li>
+          <li><span class="change-tag tag-new">New</span>Pre-order page shows the status of each day's order</li>
+          <li><span class="change-tag tag-new">New</span>Phone number validation on login, signup and forgot-PIN (auto-formats to 09XXXXXXXX / 07XXXXXXXX)</li>
+          <li><span class="change-tag tag-improve">Improve</span>Fasting-day restriction now applies only to combo plans; clearer fasting/non-fasting labels</li>
+          <li><span class="change-tag tag-improve">Improve</span>Friendly message when your caterer has no published meal plans; smoother bottom-nav transitions</li>
+          <li><span class="change-tag tag-fix">Fix</span>Crash fix and stability improvements</li>
+        </ul>
+      </div>
+      <div class="version-bottom">
+        <span class="file-size">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
+            <polyline points="13 2 13 9 20 9"/>
+          </svg>
+          54 MB
+        </span>
+        <a class="download-btn secondary" href="fewa_customer_v1.6.0.apk">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Download
+        </a>
+      </div>
+    </div>
+
+    <!-- v1.5.0 -->
+    <div class="version-card" data-version="v1.5.0" data-type="stable" data-date="Jun 22, 2026">
+      <div class="version-top">
+        <div class="version-info">
+          <span class="version-number">v1.5.0</span>
+          <span class="badge badge-stable">Stable</span>
+        </div>
+        <span class="version-date">Jun 22, 2026</span>
+      </div>
+      <div class="version-changes">
+        <ul>
+          <li><span class="change-tag tag-new">New</span>Meal-plan ordering restriction: fasting-plan users can order fasting meals only (and non-fasting plans, non-fasting meals)</li>
+          <li><span class="change-tag tag-improve">Improve</span>Non-matching meals stay visible but their Order button is disabled with "Not in your plan"</li>
+          <li><span class="change-tag tag-improve">Improve</span>Restriction applied consistently across Home and Pre-order screens</li>
+        </ul>
+      </div>
+      <div class="version-bottom">
+        <span class="file-size">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
+            <polyline points="13 2 13 9 20 9"/>
+          </svg>
+          52 MB
+        </span>
+        <a class="download-btn secondary" href="fewa_customer_v1.5.0.apk">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Download
+        </a>
+      </div>
+    </div>
+
+    <!-- v1.4.0 -->
+    <div class="version-card" data-version="v1.4.0" data-type="stable" data-date="May 16, 2026">
+      <div class="version-top">
+        <div class="version-info">
+          <span class="version-number">v1.4.0</span>
+          <span class="badge badge-stable">Stable</span>
+        </div>
+        <span class="version-date">May 16, 2026</span>
+      </div>
+      <div class="version-changes">
+        <ul>
+          <li>Order-cutoff reminders Mon–Fri at 9:00 AM (fires while app is closed)</li>
+          <li>Inactivity reminders every 2 hours (9 AM–7 PM) — auto-cancel when activated</li>
+          <li>Tap a day on the Orders screen to open pre-order — works even when the day already has orders</li>
+          <li>Payment verification now reads settled_amount from the verify response</li>
+        </ul>
+      </div>
+      <div class="version-bottom">
+        <span class="file-size">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
+            <polyline points="13 2 13 9 20 9"/>
+          </svg>
+          52 MB
+        </span>
+        <a class="download-btn secondary" href="fewa_customer_v1.4.0.apk">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Download
+        </a>
+      </div>
+    </div>
+
+    <!-- v1.3.0 -->
+    <div class="version-card" data-version="v1.3.0" data-type="stable" data-date="May 11, 2026">
+      <div class="version-top">
+        <div class="version-info">
+          <span class="version-number">v1.3.0</span>
+          <span class="badge badge-stable">Stable</span>
+        </div>
+        <span class="version-date">May 11, 2026</span>
+      </div>
+      <div class="version-changes">
+        <ul>
+          <li><span class="change-tag tag-new">New</span>New release build</li>
+          <li><span class="change-tag tag-improve">Improve</span>Updated features and performance</li>
+        </ul>
+      </div>
+      <div class="version-bottom">
+        <span class="file-size">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
+            <polyline points="13 2 13 9 20 9"/>
+          </svg>
+          53.2 MB
+        </span>
+        <a class="download-btn secondary" href="fewa_customer_v1.3.0.apk">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Download
+        </a>
+      </div>
+    </div>
+
+    <!-- v1.2.0 -->
+    <div class="version-card" data-version="v1.2.0" data-type="stable" data-date="Apr 28, 2026">
+      <div class="version-top">
+        <div class="version-info">
+          <span class="version-number">v1.2.0</span>
+          <span class="badge badge-stable">Stable</span>
+        </div>
+        <span class="version-date">Apr 28, 2026</span>
+      </div>
+      <div class="version-changes">
+        <ul>
+          <li><span class="change-tag tag-new">New</span>New release build</li>
+          <li><span class="change-tag tag-improve">Improve</span>Updated features and performance</li>
+        </ul>
+      </div>
+      <div class="version-bottom">
+        <span class="file-size">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
+            <polyline points="13 2 13 9 20 9"/>
+          </svg>
+          50 MB
+        </span>
+        <a class="download-btn secondary" href="fewa_customer_v1.2.0.apk">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Download
+        </a>
+      </div>
+    </div>
+
+    <!-- v1.1.0 -->
+    <div class="version-card" data-version="v1.1.0" data-type="stable" data-date="Apr 28, 2026">
+      <div class="version-top">
+        <div class="version-info">
+          <span class="version-number">v1.1.0</span>
+          <span class="badge badge-stable">Stable</span>
+        </div>
+        <span class="version-date">Apr 28, 2026</span>
+      </div>
+      <div class="version-changes">
+        <ul>
+          <li><span class="change-tag tag-new">New</span>New release build</li>
+          <li><span class="change-tag tag-improve">Improve</span>Updated dependencies and performance</li>
+        </ul>
+      </div>
+      <div class="version-bottom">
+        <span class="file-size">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
+            <polyline points="13 2 13 9 20 9"/>
+          </svg>
+          50 MB
+        </span>
+        <a class="download-btn secondary" href="fewalunch-v1.1.0.apk">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Download
+        </a>
+      </div>
+    </div>
+
+    <!-- v1.0.0 -->
+    <div class="version-card" data-version="v1.0.0" data-type="stable" data-date="Apr 28, 2026">
+      <div class="version-top">
+        <div class="version-info">
+          <span class="version-number">v1.0.0</span>
+          <span class="badge badge-stable">Stable</span>
+        </div>
+        <span class="version-date">Apr 28, 2026</span>
+      </div>
+      <div class="version-changes">
+        <ul>
+          <li><span class="change-tag tag-new">New</span>Initial release</li>
+        </ul>
+      </div>
+      <div class="version-bottom">
+        <span class="file-size">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
+            <polyline points="13 2 13 9 20 9"/>
+          </svg>
+          APK
+        </span>
+        <a class="download-btn secondary" href="fewalunch.apk">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Download
+        </a>
+      </div>
+    </div>
+
+    <!--
+      EXAMPLE: v1.1.0 would look like this:
+
+      <div class="version-card latest" data-version="v1.1.0" data-type="stable" data-date="May 15, 2026">
+        <div class="version-top">
+          <div class="version-info">
+            <span class="version-number">v1.1.0</span>
+            <span class="badge badge-latest">Latest</span>
+            <span class="badge badge-stable">Stable</span>
+          </div>
+          <span class="version-date">May 15, 2026</span>
+        </div>
+        <div class="version-changes">
+          <ul>
+            <li><span class="change-tag tag-new">New</span>Added push notifications</li>
+            <li><span class="change-tag tag-improve">Improve</span>Faster loading time</li>
+            <li><span class="change-tag tag-fix">Fix</span>Login crash on Android 12</li>
+          </ul>
+        </div>
+        <div class="version-bottom">
+          <span class="file-size">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
+              <polyline points="13 2 13 9 20 9"/>
+            </svg>
+            25.4 MB
+          </span>
+          <a class="download-btn" href="fewalunch-v1.1.0.apk">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            Download
+          </a>
+        </div>
+      </div>
+    -->
+
+  </div>
+
+  <!-- Empty state -->
+  <div class="empty-state" id="emptyState">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+    </svg>
+    <p>No releases found</p>
+    <p class="hint">Try a different search term or filter</p>
+  </div>
+
+  <!-- Note -->
+  <div class="note">
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    &copy; 2026 Fewa Lunch. All rights reserved.
+  </div>
+
+</div>
+
+<script>
+  const searchInput = document.getElementById('searchInput');
+  const versionList = document.getElementById('versionList');
+  const emptyState = document.getElementById('emptyState');
+  const resultCount = document.getElementById('resultCount');
+  const clearSearch = document.getElementById('clearSearch');
+  const filterBtns = document.querySelectorAll('.filter-btn');
+
+  let activeFilter = 'all';
+
+  function filterAndSearch() {
+    const query = searchInput.value.toLowerCase().trim();
+    const cards = versionList.querySelectorAll('.version-card');
+    let visible = 0;
+
+    cards.forEach(card => {
+      const version = (card.dataset.version || '').toLowerCase();
+      const type = (card.dataset.type || '').toLowerCase();
+      const date = (card.dataset.date || '').toLowerCase();
+      const changelog = card.querySelector('.version-changes')?.textContent.toLowerCase() || '';
+
+      const searchText = version + ' ' + date + ' ' + changelog;
+      const matchesSearch = !query || searchText.includes(query);
+      const matchesFilter = activeFilter === 'all' || type === activeFilter;
+
+      if (matchesSearch && matchesFilter) {
+        card.style.display = '';
+        visible++;
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    emptyState.style.display = visible === 0 ? 'block' : 'none';
+    resultCount.textContent = visible === 1 ? 'Showing 1 release' : `Showing ${visible} releases`;
+    clearSearch.style.display = query ? 'inline' : 'none';
+  }
+
+  searchInput.addEventListener('input', filterAndSearch);
+
+  clearSearch.addEventListener('click', () => {
+    searchInput.value = '';
+    filterAndSearch();
+    searchInput.focus();
+  });
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeFilter = btn.dataset.filter;
+      filterAndSearch();
+    });
+  });
+</script>
+
+</body>
+</html>
